@@ -160,7 +160,7 @@ Em seguida, instale o Graylog Server 3.0.
 ```shell
 $ yum install graylog-server
 ```
-##$ Configurando o Graylog
+## Configurando o Graylog
 
 Arquivo de configuração do Graylog: **/etc/graylog/server/server.conf**
 
@@ -283,12 +283,3 @@ green  open   graylog_0 C8i0-NybRrWtFnbubwIy3Q   1   0       6691            0  
 ```
 
 Nosso índice nesse caso é **graylog_0**.
-
-
-
-
-
-
-
-
-
