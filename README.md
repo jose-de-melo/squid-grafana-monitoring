@@ -265,6 +265,26 @@ Entre com o nome de usuário **admin** e a senha cujo hash foi gerado acima. Ao 
 
 <img src="img/graylog-dashboard.png" alt="Dashboard - Graylog" style="margin-left: 20%;margin-top:10px;margin-bottom:10px;">
 
+## Criando Index Set para o Elasticsearch
+
+O Graylog utiliza um ou mais conjunto de índices (index set) do Elasticsearch para otimizar as operações de pesquisa e análise com mais velocidade e baixo consumo de recursos.
+
+Por padrão, o Graylog já cria um index set default. Caso o Graylog não crie esse index set default, você pode criar um índice, acessando a interface web do Graylog e navegando até **System > Indices** e clique em **Create Index Set**. Na página de configuração do índice, defina o nome do índice, descrição (opcional), um prefixo exclusivo para uso no Elasticsearch, número de shards do Elasticsearch e a estratégia de rotação do índice.
+
+<img src="img/graylog-create-index-1.png" alt="Create Index" style="margin-left: 20%;margin-top:10px;margin-bottom:10px;">
+<img src="img/graylog-create-index-2.png" alt="Create Index" style="margin-left: 20%;margin-top:10px;margin-bottom:10px;">
+
+Quando terminar, clique em **Save** para salvar o índice. Para verificar o nome do índice para sua fonte de dados Elasticsearch, execute o seguinte comando:
+
+```shell
+# curl -XGET ip_servidor_graylog:9200/_cat/indices?v
+health status index     uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+green  open   graylog_0 C8i0-NybRrWtFnbubwIy3Q   1   0       6691            0      3.4mb          3.4mb
+```
+
+Nosso índice nesse caso é **graylog_0**.
+
+
 
 
 
