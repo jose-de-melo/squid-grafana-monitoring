@@ -247,7 +247,7 @@ $ vim /etc/graylog/server/server.conf
 ...
 ```
 
-##$ Executando o Graylog
+## Executando o Graylog
 Execute os comandos abaixo para iniciar e permitir que o servidor Graylog seja executado na reinicialização do sistema.
 
 ```shell
