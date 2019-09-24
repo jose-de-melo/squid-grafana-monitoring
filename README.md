@@ -9,10 +9,14 @@
 
 
 
-## Desativando o SELinux
+## Desativando o Firewalld e o SELinux
+
+O firewalld é uma ferramenta de gerenciamento de firewall para sistemas operacionais Linux. SELinux é uma camada de segurança extra para servidores que limita as ações dos usuários e programas pela imposição de políticas de segurança por todo o sistema operacional. Algumas dessas políticas e regras de firewall podem afetar o funcionamento dos serviços que vamos implementar, portanto vamos desativá-lo.
+
 ```shell
 $ systemctl stop firewalld.service
 $ systemctl disable firewalld.service
+
 $ sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 $ setenforce 0
 $ reboot
