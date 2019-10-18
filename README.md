@@ -289,6 +289,55 @@ green  open   graylog_0 C8i0-NybRrWtFnbubwIy3Q   1   0       6691            0  
 Nosso índice nesse caso é **graylog_0**.
 
 
+## Enviando logs Squid para o Graylog
+
+
+Agora vamos fazer com que o Squid repasse os logs geradospara servidor Graylog, para realizarmos a filtragem dos dados e enviar o resultado para o Elasticsearch. Para isso, vamos definir um novo formato de log no arquivo **/etc/squid/squid.conf** para formatar um log de acesso ao proxy em um formato JSON:
+
+```shell
+$ logformat graylog_vhost {"version": "1.1", "host": "% {Host}> h", "short_message": "% rm% ru HTTP /% rv", "level": 6, "timestamp": " % tl "," _ client_ip ":"%> a "," _ squid_ip ":"% la "," _ server_ip ":"% <a "," _ response_time ":"% tr "," _ request_size ":"%> st "," _ reply_size ":"% <st "," _ http_url ":"% ru "," _ http_status ":"%> Hs "," _ http_method ":"% rm "," _ http_referer ":"% {Referer}> h "," _ user_agent ":"% {User-Agent}> h "," _ squid_request_status ":"% Ss "," _ squid_hierarchy_status ":"% Sh "," _ from_squid ":" true "}
+```
+
+Exemplo do formato acima legível para humanos:
+
+```shell
+{
+   "version": "1.1",
+   "host": "% {Host}> h",
+   "short_message": "% rm% ru HTTP /% rv",
+   "nível": 6,
+   "registro de data e hora": "% tl",
+   "_client_ip": "%> a",
+   "_squid_ip": "% la",
+   "_server_ip": "% <a", 
+   "_response_time": "% tr", 
+   "_request_size": "%> st",
+   "_reply_size": "% <st", 
+   "_http_url": "% ru", 
+   "_http_status": "%> Hs",
+   "_http_method": "% rm",
+   "_http_referer": "% {Referer}> h",
+   "_user_agent": "% {User-Agent}> h",
+   "_squid_request_status": "% Ss",
+   "_squid_hierarchy_status": "% Sh",
+   "_from_squid": "true"
+}
+```
+
+Acesse o link [Squid 3.5.19 Configuration File: logformat](http://www.squid-cache.org/Versions/v3/3.5/cfgman/logformat.html) para outros argumentos de formato disponíveis.
+
+O Squid é capaz de enviar cada linha de log de acesso como dados de texto para um receptor TCP ou UDP. Vamos usar essa funcionalidade para enviar os logs ao servidor Graylog . As seguintes linhas no arquivo de configuração do Squid,**/etc/squid/squid.conf**, farão o trabalho:
+
+```shell
+access_log udp:127.0.0.1:1031 graylog_vhost
+access_log tcp:127.0.0.1:1030 graylog_vhost
+```
+
+Com isso, habilitamos o envio dos logs (já formatados em JSON, graças ao logformat **graylog_vhost**) para o servidor Graylog, nesse caso, rodando na mesma máquina que o Squid. 
+
+Agora, precisaremos fazer com que o servidor Graylog receba os dados através das portas 1031 (udp) e 1030 (tcp), configuradas no arquivo ***/etc/squid/squid.conf***.
+
+
 
 
 
