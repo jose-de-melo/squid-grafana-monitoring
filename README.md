@@ -337,6 +337,39 @@ Com isso, habilitamos o envio dos logs (já formatados em JSON, graças ao logfo
 
 Agora, precisaremos fazer com que o servidor Graylog receba os dados através das portas 1031 (udp) e 1030 (tcp), configuradas no arquivo ***/etc/squid/squid.conf***.
 
+## Recebendo, interpretando e armazenando os logs recebidos
+
+Primeiro vamos criar dois **"inputs"** para receber os logs enviados pelo Squid. Para isso, na interface web do Graylog, navegue até **System > Inputs**. Primeiro vamos configurar um input para receber os logs através da porta 1030, usando o protocolo TCP. Selecione **Syslog TCP** e clique em **Launch Input**:
+
+
+<img src="img/graylog-create-input.png" alt="Create Input" style="margin-top:10px;margin-bottom:10px;">
+
+Vamos configurar os seguintes valores para os parâmetros:
+
+<ul>
+  <li><b>Title: </b>Coloque um título simples para diferenciar o input do TCP do UDP</li>
+  <li><b>Node: </b>Selecione o nó do Graylog que estamos trabalhando</li>
+  <li><b>Bind address: </b> 127.0.0.1</li>
+  <li><b>Port: </b>1030</li>
+</ul>
+
+Repita o procedimento para configurar o **input** UDP, selecionando **Syslog UDP** e trocando apenas os valores dos parâmetros **Title** e **Port** (1031).
+
+Agora, vamos extrair os dados dos logs recebidos através dos inputs utilizando **extratores**. 
+
+Primeiro, navegue até a página de pesquisa de mensagens, clicando em **Search** no menu superior. Em seguida, selecione um log recebido através de um dos inputs configurados anteriormente e localize o campo **"message"**. Clique na seta que aponta para baixo, selecione a opção **"Create extractor for field message"** e selecione o tipo **JSON**, como mostra a imagem a seguir:
+
+<img src="img/graylog-create-extractor.png" alt="Create extractor" style="margin-top:10px;margin-bottom:10px;">
+
+Dê um nome para o extrator e clique em **Create extractor**. Pronto, o extrator está configurado. Agora é só repetir o processo selecionando um log recebido através do outro input.
+
+Com isso, todos os dados extraídos dos logs utilizando os extratores serão armazenados no **Elasticsearch**, realizando uma filtragem nos dados recebidos diretamente nos inputs. 
+
+
+
+
+
+
 
 
 
